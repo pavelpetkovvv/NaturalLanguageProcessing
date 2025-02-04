@@ -1,4 +1,6 @@
 from abc import ABCMeta, abstractmethod
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 class IGraph(metaclass=ABCMeta):

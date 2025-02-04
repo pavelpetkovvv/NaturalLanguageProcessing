@@ -5,6 +5,7 @@ import warnings
 
 from .summarizer import summarize
 from .keywords import keywords
+from .lsa_summarization import lsa_summarize
 
 # Types of summarization
 SENTENCE = 0
@@ -12,6 +13,9 @@ WORD = 1
 
 DEFAULT_RATIO = 0.2
 
+
+def lsa(text, language='english'):
+    return lsa_summarize(text, language)
 
 def textrank(text, summarize_by=SENTENCE, language='english', ratio=DEFAULT_RATIO, words=None, additional_stopwords=None):
     if summarize_by == SENTENCE:
@@ -48,7 +52,7 @@ def parse_args(args):
     group.add_argument('--text', '-t', metavar="path/to/file", type=existing_file,
                        help="(Deprecated) Text to summarize if --summary option is selected")
     
-    group.add_argument('--language', '-l', metavar="language")
+    group.add_argument('--language', '-l', metavar="language", default="english")
 
     parser.add_argument('--summary', '-s', metavar="{0,1}", type=int, choices=[SENTENCE, WORD], default=0,
                         help="(Deprecated) Type of unit to summarize: sentence (0) or word (1)")
@@ -61,6 +65,9 @@ def parse_args(args):
     
     parser.add_argument('--additional_stopwords', '-a', metavar="list,of,stopwords",
                         help="Either a string of comma separated stopwords or a path to a file which has comma separated stopwords in every line")
+    
+    parser.add_argument('--algorithm', metavar="algorithm", type=str, default="textrank",
+                       help="The algorithm to use for summarization. Currently 'textrank' and LSA are supported.")
 
     return parser.parse_args(args)
 
@@ -97,7 +104,12 @@ def main():
             additional_stopwords = args.additional_stopwords.split(",")
 
 
-    print(textrank(text, mode, "english", args.ratio, args.words, additional_stopwords))
+    if args.algorithm == "textrank":
+        print(textrank(text, mode, args.language, args.ratio, args.words, additional_stopwords))
+    elif args.algorithm == "lsa":
+        print(lsa(text, args.language))
+    else:
+        raise argparse.ArgumentTypeError("Error: --algorithm must be either 'textrank' or 'lsa'")
 
 
 if __name__ == "__main__":
