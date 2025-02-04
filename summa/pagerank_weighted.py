@@ -39,9 +39,6 @@ def pagerank_weighted_scipy(graph, damping=0.85):
     # See https://github.com/summanlp/textrank/issues/57
     import warnings
     with warnings.catch_warnings():
-        from numpy import VisibleDeprecationWarning
-        warnings.filterwarnings("ignore", category=VisibleDeprecationWarning)
-        warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
         pagerank_matrix = damping * adjacency_matrix.todense() + (1 - damping) * probability_matrix
 
     vals, vecs = eig(pagerank_matrix, left=True, right=False)

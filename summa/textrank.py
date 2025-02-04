@@ -3,8 +3,8 @@ import os
 import sys
 import warnings
 
-from summarizer import summarize
-from keywords import keywords
+from .summarizer import summarize
+from .keywords import keywords
 
 # Types of summarization
 SENTENCE = 0

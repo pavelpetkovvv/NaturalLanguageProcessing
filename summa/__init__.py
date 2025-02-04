@@ -1,2 +1,2 @@
-from summa import commons, graph, keywords, pagerank_weighted, \
-                  summarizer, syntactic_unit, textrank
+from summa import commons, graph, keywords, pagerank_weighted, summarizer, textrank
+from summa.preprocessing import syntactic_unit
