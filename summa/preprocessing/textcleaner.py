@@ -158,14 +158,17 @@ def merge_syntactic_units(original_units, filtered_units, tags=None):
     return units
 
 
-def clean_text_by_sentences(text, language="english", additional_stopwords=None):
+def clean_text_by_sentences(text, language="english", additional_stopwords=None, clean_sentences=True):
     """ Tokenizes a given text into sentences, applying filters and lemmatizing them.
     Returns a SyntacticUnit list. """
     init_textcleanner(language, additional_stopwords)
     original_sentences = split_sentences(text)
     filtered_sentences = filter_words(original_sentences)
 
-    return merge_syntactic_units(original_sentences, filtered_sentences)
+    if clean_sentences:
+        return merge_syntactic_units(original_sentences, filtered_sentences)
+    
+    return merge_syntactic_units(original_sentences, original_sentences)
 
 
 def clean_text_by_word(text, language="english", deacc=False, additional_stopwords=None):

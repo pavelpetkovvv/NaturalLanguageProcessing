@@ -17,9 +17,9 @@ DEFAULT_RATIO = 0.2
 def lsa(text, language='english'):
     return lsa_summarize(text, language)
 
-def textrank(text, summarize_by=SENTENCE, language='english', ratio=DEFAULT_RATIO, words=None, additional_stopwords=None):
+def textrank(text, summarize_by=SENTENCE, language='english', ratio=DEFAULT_RATIO, words=None, clean_sentences=True, additional_stopwords=None):
     if summarize_by == SENTENCE:
-        return summarize(text, ratio, words, language, additional_stopwords=additional_stopwords)
+        return summarize(text, clean_sentences, ratio, words, language, additional_stopwords=additional_stopwords)
     else:
         return keywords(text, ratio, words, additional_stopwords=additional_stopwords)
 
@@ -68,6 +68,9 @@ def parse_args(args):
     
     parser.add_argument('--algorithm', metavar="algorithm", type=str, default="textrank",
                        help="The algorithm to use for summarization. Currently 'textrank' and LSA are supported.")
+    
+    parser.add_argument('--clean', metavar="clean", type=str, default=True,
+                       help="")
 
     return parser.parse_args(args)
 
@@ -103,9 +106,12 @@ def main():
         else:
             additional_stopwords = args.additional_stopwords.split(",")
 
+    clean_sentences = True
+    if args.clean.lower() == "false":
+        clean_sentences = False
 
     if args.algorithm == "textrank":
-        print(textrank(text, mode, args.language, args.ratio, args.words, additional_stopwords))
+        print(textrank(text, mode, args.language, args.ratio, args.words, clean_sentences, additional_stopwords))
     elif args.algorithm == "lsa":
         print(lsa(text, args.language))
     else:
